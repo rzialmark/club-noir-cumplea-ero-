@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Club Noir — Web</title>
+  <style>
+    :root{
+      --paper:#d8c3a3;
+      --paper-dark:#c9af88;
+      --ink:#1d1916;
+      --red:#b52b25;
+      --blue:#3e6481;
+      --shadow:0 24px 60px rgba(0,0,0,.3);
+    }
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    html,body{margin:0;height:100%;font-family:"Courier New",monospace;background:#5c4c3f}
+    body{display:flex;align-items:center;justify-content:center;padding:16px}
+    .app{width:min(430px,100%);height:min(860px,calc(100vh - 24px));position:relative;overflow:hidden;border-radius:28px;box-shadow:0 32px 80px rgba(0,0,0,.35);background:#9b8264}
+    .screen{position:absolute;inset:0;background:linear-gradient(180deg,var(--paper),var(--paper-dark));transition:transform .8s cubic-bezier(.2,.8,.2,1),opacity .4s ease}
+    .screen::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 18% 20%, rgba(255,255,255,.08), transparent 18%),radial-gradient(circle at 84% 28%, rgba(0,0,0,.05), transparent 16%),radial-gradient(circle at 76% 78%, rgba(0,0,0,.04), transparent 14%)}
+    .hidden{opacity:0;pointer-events:none}
+    .left{transform:translateX(-108%)}
+    .right{transform:translateX(108%)}
+
+    /* SOBRE */
+    .envelope-stage{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:24px}
+    .envelope-wrap{position:relative;width:min(330px,88%);aspect-ratio:.68}
+    .envelope{position:absolute;inset:0;background:linear-gradient(180deg,#d9c09b,#cfb089);border:1px solid rgba(0,0,0,.14);overflow:hidden;box-shadow:var(--shadow)}
+    .envelope-top{position:absolute;left:0;right:0;top:0;height:86px;background:linear-gradient(180deg,#dfc8a6,#cfb089);border-bottom:2px solid rgba(0,0,0,.08);transform-origin:top center;transition:transform .9s cubic-bezier(.2,.8,.2,1);z-index:4}
+    .peek{position:absolute;left:22px;right:22px;bottom:18px;height:170px;background:#e7d6b9;border:1px solid rgba(0,0,0,.14);transform:translateY(36px);transition:transform .9s cubic-bezier(.2,.8,.2,1);z-index:1;box-shadow:0 10px 20px rgba(0,0,0,.12)}
+    .peek-inner{padding:18px;color:#231d17;font-size:22px;line-height:1.2}
+    .string{position:absolute;top:42px;left:50%;transform:translateX(-50%);width:90px;height:88px;z-index:5}
+    .string::before,.string::after{content:"";position:absolute;top:0;width:2px;height:54px;background:#efeae2}
+    .string::before{left:22px}.string::after{right:22px}
+    .ring{position:absolute;width:34px;height:34px;border-radius:50%;left:50%;transform:translateX(-50%);background:#f9f4ef;border:9px solid #d94741}
+    .ring.one{top:-6px}.ring.two{top:44px}
+    .tail{position:absolute;width:2px;height:42px;background:#efeae2;left:50%;top:68px;transform:translateX(-50%) rotate(10deg);transform-origin:top center}
+    .stamp{position:absolute;left:50%;top:220px;transform:translateX(-50%) rotate(-4deg);text-align:center;z-index:2}
+    .stamp-main{display:inline-block;border:4px solid var(--red);color:var(--red);padding:10px 16px;font-size:28px;font-weight:700;letter-spacing:1.4px;background:rgba(255,255,255,.04)}
+    .stamp-sub{margin-top:14px;color:#171411;font-size:18px;letter-spacing:1px}
+    .open-real-btn{position:absolute;inset:0;z-index:10;border:none;background:transparent;cursor:pointer}
+    .tap-note{position:absolute;left:0;right:0;bottom:50px;text-align:center;color:#3e342a;font-size:13px;letter-spacing:1px}
+    .envelope-wrap.open .envelope-top{transform:rotateX(180deg)}
+    .envelope-wrap.open .peek{transform:translateY(-70px)}
+    .envelope-wrap.fly{animation:flyAway 1s cubic-bezier(.2,.8,.2,1) forwards}
+    @keyframes flyAway{0%{transform:translateY(0) scale(1);opacity:1}35%{transform:translateY(-12px) scale(1.02);opacity:1}100%{transform:translateY(140px) scale(1.04);opacity:0}}
+
+    /* HOJA */
+    .doc{position:absolute;inset:0;padding:26px 24px 28px;overflow:auto;color:var(--ink)}
+    .seal{display:inline-block;border:4px solid var(--red);color:var(--red);padding:8px 14px;font-weight:700;font-size:30px;transform:rotate(-4deg);margin-top:10px}
+    h1{margin:34px 0 6px;font-size:40px;line-height:1;letter-spacing:1px}
+    .sub{margin:0 0 18px;font-size:18px}
+    .title2{margin:22px 0 10px;font-size:25px;text-decoration:underline}
+    .text{font-size:16px;line-height:1.55;max-width:95%}
+    .meta{display:grid;gap:10px;margin-top:18px}
+    .row{display:grid;grid-template-columns:108px 1fr;gap:10px;font-size:17px}
+    .maps{color:#1d4869;font-weight:700;text-decoration:underline}
+    .btns{display:grid;gap:12px;margin-top:24px}
+    .btn{border:none;cursor:pointer;padding:14px 16px;font-family:inherit;font-size:16px;box-shadow:0 6px 14px rgba(0,0,0,.12);transition:transform .15s ease}
+    .btn:active{transform:scale(.98)}
+    .primary{background:var(--red);color:#fff;font-weight:700}
+    .secondary{background:var(--blue);color:#fff}
+    .count{margin-top:16px;padding-top:14px;border-top:1px solid rgba(0,0,0,.18);font-size:15px}
+
+    /* CONFIRMACION */
+    .back{background:none;border:none;padding:0;font-family:inherit;font-size:15px;cursor:pointer;color:#2e2924;text-decoration:underline;margin:10px 0 10px}
+    label{display:block;margin:24px 0 8px;font-size:16px}
+    input{width:100%;padding:15px 14px;font-size:16px;border:1px solid rgba(0,0,0,.24);background:rgba(255,255,255,.24);font-family:inherit}
+    .ok{margin-top:18px;padding:16px;border:2px dashed rgba(0,0,0,.24);display:none}
+    .ok.show{display:block}
+    .access{display:inline-block;margin-top:10px;border:3px solid var(--red);color:var(--red);padding:8px 12px;font-weight:700;transform:rotate(-2deg)}
+    .code{display:inline-block;margin-top:10px;padding:10px 12px;background:rgba(255,255,255,.35);border:1px solid rgba(0,0,0,.18)}
+
+    /* OUTFITS */
+    .overlay{position:absolute;inset:0;background:rgba(36,27,18,.62);backdrop-filter:blur(2px);display:none;z-index:30}
+    .overlay.show{display:block}
+    .overlay-inner{position:relative;width:100%;height:100%;overflow:hidden;padding:16px}
+    .close{position:absolute;right:16px;top:16px;width:40px;height:40px;border:none;border-radius:50%;background:#111;color:#fff;font-size:18px;cursor:pointer;z-index:4}
+    .placeholder{position:absolute;inset:72px 18px 18px;border:2px dashed rgba(255,255,255,.5);display:flex;align-items:center;justify-content:center;text-align:center;color:#fff;padding:20px;font-size:16px;line-height:1.5}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <section class="screen" id="screenEnvelope">
+      <div class="envelope-stage">
+        <div class="envelope-wrap" id="envelopeWrap">
+          <div class="envelope">
+            <div class="envelope-top"></div>
+            <div class="peek"><div class="peek-inner">CLUB NOIR<br>Cumpleañero</div></div>
+            <div class="string"><div class="ring one"></div><div class="ring two"></div><div class="tail"></div></div>
+            <div class="stamp"><div class="stamp-main">CLICK TO OPEN</div><div class="stamp-sub">ARCHIVO CLASIFICADO</div></div>
+            <button class="open-real-btn" id="openBtn" aria-label="Abrir sobre"></button>
+          </div>
+        </div>
+        <div class="tap-note">Toca el sobre para abrir el archivo</div>
+      </div>
+    </section>
+
+    <section class="screen hidden right" id="screenMain">
+      <div class="doc">
+        <div class="seal">TOP SECRET</div>
+        <h1>CLUB NOIR</h1>
+        <p class="sub">Cumpleañero</p>
+        <div class="title2">INFORMACIÓN CLASIFICADA</div>
+        <div class="text">Este archivo contiene información sobre una reunión privada conocida como <b>Club Noir</b>. El acceso está limitado únicamente a invitados autorizados.</div>
+        <div class="meta">
+          <div class="row"><b>Fecha:</b><span>Sábado 14 de marzo</span></div>
+          <div class="row"><b>Hora:</b><span>5:00 PM</span></div>
+          <div class="row"><b>Dress Code:</b><span>Film Noir Fit</span></div>
+          <div class="row"><b>Ubicación:</b><span><a class="maps" href="https://maps.app.goo.gl/sjosA8LWoWiHDpyr9?g_st=ic" target="_blank" rel="noopener">Ver dirección</a></span></div>
+        </div>
+        <div class="btns">
+          <button class="btn primary" id="confirmBtn">CONFIRMAR ASISTENCIA</button>
+          <button class="btn secondary" id="outfitsBtn">VER OUTFITS</button>
+        </div>
+        <div class="count">Tiempo restante para confirmar: <b id="countdown">calculando…</b></div>
+      </div>
+    </section>
+
+    <section class="screen hidden right" id="screenConfirm">
+      <div class="doc">
+        <button class="back" id="backBtn">← Volver al archivo</button>
+        <div class="seal" style="font-size:22px;padding:6px 12px;">ACCESO</div>
+        <h1 style="font-size:34px;margin-top:22px;">CONFIRMAR ASISTENCIA</h1>
+        <div class="text">Ingresa tu nombre para registrar tu acceso. Si vuelves a abrir esta invitación desde el mismo dispositivo, tu código seguirá aquí.</div>
+        <label for="guestName">Nombre</label>
+        <input id="guestName" type="text" placeholder="Escribe tu nombre" maxlength="60" />
+        <button class="btn primary" id="sendBtn" style="margin-top:14px;width:100%;">ENVIAR</button>
+        <div class="ok" id="okBox">
+          <div>Tu acceso ha sido registrado.</div>
+          <div class="access">ACCESO AUTORIZADO</div><br />
+          <div class="code" id="codeBox"></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="overlay" id="overlay">
+      <div class="overlay-inner">
+        <button class="close" id="closeOverlay">✕</button>
+        <div class="placeholder">Aquí va la galería final de outfits con tus fotos tipo polaroid en blanco y negro, ya montada sobre el expediente.</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const screenEnvelope = document.getElementById('screenEnvelope');
+    const screenMain = document.getElementById('screenMain');
+    const screenConfirm = document.getElementById('screenConfirm');
+    const envelopeWrap = document.getElementById('envelopeWrap');
+    const openBtn = document.getElementById('openBtn');
+    const confirmBtn = document.getElementById('confirmBtn');
+    const outfitsBtn = document.getElementById('outfitsBtn');
+    const backBtn = document.getElementById('backBtn');
+    const closeOverlay = document.getElementById('closeOverlay');
+    const overlay = document.getElementById('overlay');
+    const sendBtn = document.getElementById('sendBtn');
+    const guestName = document.getElementById('guestName');
+    const okBox = document.getElementById('okBox');
+    const codeBox = document.getElementById('codeBox');
+    const countdown = document.getElementById('countdown');
+    const STORAGE_KEY = 'club_noir_web_test';
+
+    function showMain() {
+      envelopeWrap.classList.add('open');
+      setTimeout(() => envelopeWrap.classList.add('fly'), 520);
+      setTimeout(() => {
+        screenEnvelope.classList.add('left');
+        screenMain.classList.remove('hidden');
+        screenMain.classList.remove('right');
+      }, 980);
+    }
+
+    openBtn.addEventListener('click', showMain);
+    openBtn.addEventListener('touchend', function(e){ e.preventDefault(); showMain(); }, {passive:false});
+
+    confirmBtn.addEventListener('click', function(){
+      screenMain.classList.add('left');
+      screenConfirm.classList.remove('hidden');
+      screenConfirm.classList.remove('right');
+    });
+
+    backBtn.addEventListener('click', function(){
+      screenMain.classList.remove('left');
+      screenConfirm.classList.add('hidden');
+      screenConfirm.classList.add('right');
+    });
+
+    outfitsBtn.addEventListener('click', function(){ overlay.classList.add('show'); });
+    closeOverlay.addEventListener('click', function(){ overlay.classList.remove('show'); });
+
+    function slugify(text){
+      return text.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9 ]/g,'').trim().replace(/\s+/g,'-').toUpperCase();
+    }
+    function codeFor(name){
+      const hash = Math.abs(Array.from(name).reduce((a,c)=>a+c.charCodeAt(0),0)) % 900 + 100;
+      return `NOIR-${slugify(name).slice(0,8) || 'INVITADO'}-${hash}`;
+    }
+    function save(data){ localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
+    function load(){ try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null'); } catch(e){ return null; } }
+    function render(data){ if(!data) return; guestName.value = data.name; okBox.classList.add('show'); codeBox.textContent = `Código Noir: ${data.code}`; }
+
+    sendBtn.addEventListener('click', function(){
+      const name = guestName.value.trim();
+      if(!name){ alert('Ingresa tu nombre.'); return; }
+      const saved = load();
+      const code = saved?.code || codeFor(name);
+      const data = {name, code};
+      save(data);
+      render(data);
+    });
+    render(load());
+
+    function updateCountdown(){
+      const limit = new Date('2026-03-12T23:59:59');
+      const now = new Date();
+      const diff = limit - now;
+      if(diff <= 0){ countdown.textContent = 'confirmaciones cerradas'; return; }
+      const d = Math.floor(diff / (1000*60*60*24));
+      const h = Math.floor((diff / (1000*60*60)) % 24);
+      const m = Math.floor((diff / (1000*60)) % 60);
+      countdown.textContent = d > 0 ? `${d} día${d!==1?'s':''}, ${h} h, ${m} min` : `${h} h, ${m} min`;
+    }
+    updateCountdown();
+  </script>
+</body>
+</html>
