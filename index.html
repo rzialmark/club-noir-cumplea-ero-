@@ -456,108 +456,125 @@
     ========================= */
 
     .overlay {
-      position: absolute;
-      inset: 0;
-      background: rgba(35,26,17,.62);
-      backdrop-filter: blur(2px);
-      display: none;
-      z-index: 30;
-    }
+  position: absolute;
+  inset: 0;
+  background: rgba(35,26,17,.62);
+  backdrop-filter: blur(2px);
+  display: none;
+  z-index: 30;
+}
 
-    .overlay.show {
-      display: block;
-    }
+.overlay.show {
+  display: block;
+}
 
-    .overlay-inner {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      padding: 16px;
-    }
+.overlay-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  padding: 16px 16px 28px;
+}
 
-    .close {
-      position: absolute;
-      right: 16px;
-      top: 16px;
-      width: 40px;
-      height: 40px;
-      border: none;
-      border-radius: 50%;
-      background: #111;
-      color: #fff;
-      font-size: 18px;
-      cursor: pointer;
-      z-index: 50;
-    }
+.close {
+  position: sticky;
+  top: 0;
+  margin-left: auto;
+  display: block;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  background: #111;
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+  z-index: 50;
+}
 
-    .polaroid {
-      position: absolute;
-      width: 146px;
-      background: #fff;
-      padding: 8px 8px 18px;
-      box-shadow: 0 16px 30px rgba(0,0,0,.36);
-      transform: translateY(35px) rotate(var(--rot));
-      opacity: 0;
-      transition: all .5s ease;
-      cursor: pointer;
-    }
+.polaroid-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px 14px;
+  padding: 18px 8px 28px;
+  align-items: start;
+}
 
-    .overlay.show .polaroid {
-      transform: translateY(0) rotate(var(--rot));
-      opacity: 1;
-    }
+.polaroid {
+  position: relative;
+  width: 100%;
+  background: #fff;
+  padding: 8px 8px 18px;
+  box-shadow: 0 16px 30px rgba(0,0,0,.36);
+  opacity: 0;
+  transform: translateY(20px) rotate(0deg);
+  transition: all .45s ease;
+  cursor: pointer;
+}
 
-    .polaroid img {
-      display: block;
-      width: 100%;
-      aspect-ratio: 3 / 4;
-      object-fit: cover;
-      filter: grayscale(1) contrast(1.05);
-    }
+.overlay.show .polaroid {
+  opacity: 1;
+  transform: translateY(0) rotate(var(--rot));
+}
 
-    .polaroid figcaption {
-      margin-top: 8px;
-      font-size: 12px;
-      text-align: center;
-      color: #111;
-    }
+.polaroid img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  filter: grayscale(1) contrast(1.05);
+}
 
-    .lightbox {
-      position: absolute;
-      inset: 0;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      background: rgba(0,0,0,.82);
-      z-index: 60;
-      padding: 20px;
-    }
+.polaroid figcaption {
+  margin-top: 8px;
+  font-size: 12px;
+  text-align: center;
+  color: #111;
+}
 
-    .lightbox.show {
-      display: flex;
-    }
+.p1 { --rot: 12deg; top: 0; }
+.p2 { --rot: -8deg; top: 10px; }
+.p3 { --rot: -13deg; top: -4px; }
+.p4 { --rot: 9deg; top: 6px; }
+.p5 { --rot: 10deg; top: -8px; }
+.p6 { --rot: -7deg; top: 8px; }
 
-    .lightbox-card {
-      background: #fff;
-      padding: 12px 12px 22px;
-      max-width: 86%;
-      box-shadow: 0 20px 40px rgba(0,0,0,.45);
-    }
+.lightbox {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,.82);
+  z-index: 60;
+  padding: 20px;
+}
 
-    .lightbox-card img {
-      display: block;
-      max-width: 100%;
-      max-height: 72vh;
-      filter: grayscale(1) contrast(1.05);
-    }
+.lightbox.show {
+  display: flex;
+}
 
-    .lightbox-card div {
-      margin-top: 10px;
-      text-align: center;
-      font-size: 14px;
-      color: #111;
-    }
+.lightbox-card {
+  background: #fff;
+  padding: 12px 12px 22px;
+  max-width: 86%;
+  box-shadow: 0 20px 40px rgba(0,0,0,.45);
+}
+
+.lightbox-card img {
+  display: block;
+  max-width: 100%;
+  max-height: 72vh;
+  filter: grayscale(1) contrast(1.05);
+}
+
+.lightbox-card div {
+  margin-top: 10px;
+  text-align: center;
+  font-size: 14px;
+  color: #111;
+}
+    
   </style>
 </head>
 <body>
@@ -599,6 +616,7 @@
     <!-- =========================
          PANTALLA 2: DOCUMENTO PRINCIPAL
     ========================= -->
+    
     <section class="screen hidden right" id="screenMain">
       <div class="doc">
         <div class="seal">TOP SECRET</div>
@@ -614,7 +632,7 @@
         <div class="meta">
           <div class="row"><b>Fecha:</b><span>Sábado 14 de marzo</span></div>
           <div class="row"><b>Hora:</b><span>5:00 PM</span></div>
-          <div class="row"><b>Dress Code:</b><span>Film Noir Fit</span></div>
+          <div class="row"><b>Dress Code:</b><span>Film Noir Outfit</span></div>
           <div class="row"><b>Ubicación:</b><span><a class="maps" href="https://maps.app.goo.gl/sjosA8LWoWiHDpyr9?g_st=ic" target="_blank" rel="noopener">Ver dirección</a></span></div>
         </div>
 
@@ -632,6 +650,7 @@
     <!-- =========================
          PANTALLA 3: CONFIRMAR
     ========================= -->
+    
     <section class="screen hidden right" id="screenConfirm">
       <div class="doc">
         <button class="back" id="backBtn">← Volver al archivo</button>
@@ -643,10 +662,11 @@
           Ingresa tu nombre para registrar tu acceso. Si vuelves a abrir esta invitación desde el mismo dispositivo, tu código seguirá aquí.
         </div>
 
-        <label for="guestName">Nombre</label>
-        <input id="guestName" type="text" placeholder="Escribe tu nombre" maxlength="60" />
-
-        <button class="btn primary" id="sendBtn" style="margin-top:14px;width:100%;">ENVIAR</button>
+        <form id="rsvpForm" style="position:relative;z-index:1;">
+          <label for="guestName">Nombre y apellido</label>
+          <input id="guestName" name="guestName" type="text" placeholder="Escribe tu nombre y apellido" maxlength="80" required />
+          <button class="btn primary" id="sendBtn" type="submit" style="margin-top:14px;width:100%;">ENVIAR</button>
+        </form>
 
         <div class="ok" id="okBox">
           <div>Tu acceso ha sido registrado.</div>
@@ -662,54 +682,59 @@
          Aquí debes poner los nombres exactos
          de las imágenes que subas al repo.
     ========================= -->
+    
     <div class="overlay" id="overlay">
-      <div class="overlay-inner">
-        <button class="close" id="closeOverlay">✕</button>
+  <div class="overlay-inner">
+    <button class="close" id="closeOverlay">✕</button>
 
-        <!-- FOTO 1 -->
-        <figure class="polaroid" style="top:86px; left:18px; --rot:-7deg;">
-          <img src="outfit1.png" alt="Glamour clásico" />
-          <figcaption>Glamour clásico</figcaption>
-        </figure>
+    <div class="polaroid-grid">
 
-        <!-- FOTO 2 -->
-        <figure class="polaroid" style="top:76px; right:18px; --rot:6deg;">
-          <img src="outfit2.png" alt="Astucia elegante" />
-          <figcaption>Astucia elegante</figcaption>
-        </figure>
+      <!-- FOTO 1 -->
+      <figure class="polaroid p1">
+        <img src="outfit1.png" alt="Glamour clásico" />
+        <figcaption>Glamour clásico</figcaption>
+      </figure>
 
-        <!-- FOTO 3 -->
-        <figure class="polaroid" style="top:246px; left:28px; --rot:-5deg;">
-          <img src="outfit3.png" alt="Noir moderno" />
-          <figcaption>Noir moderno</figcaption>
-        </figure>
+      <!-- FOTO 2 -->
+      <figure class="polaroid p2">
+        <img src="outfit2.png" alt="Astucia elegante" />
+        <figcaption>Astucia elegante</figcaption>
+      </figure>
 
-        <!-- FOTO 4 -->
-        <figure class="polaroid" style="top:238px; right:26px; --rot:5deg;">
-          <img src="outfit4.png" alt="Detective refinado" />
-          <figcaption>Detective refinado</figcaption>
-        </figure>
+      <!-- FOTO 3 -->
+      <figure class="polaroid p3">
+        <img src="outfit3.png" alt="Noir moderno" />
+        <figcaption>Noir moderno</figcaption>
+      </figure>
 
-        <!-- FOTO 5 -->
-        <figure class="polaroid" style="top:412px; left:62px; --rot:-4deg;">
-          <img src="outfit5.png" alt="Traje clásico" />
-          <figcaption>Traje clásico</figcaption>
-        </figure>
+      <!-- FOTO 4 -->
+      <figure class="polaroid p4">
+        <img src="outfit4.png" alt="Detective refinado" />
+        <figcaption>Detective refinado</figcaption>
+      </figure>
 
-        <!-- FOTO 6 -->
-        <figure class="polaroid" style="top:404px; right:58px; --rot:4deg;">
-          <img src="outfit6.png" alt="Tirantes y actitud" />
-          <figcaption>Tirantes y actitud</figcaption>
-        </figure>
+      <!-- FOTO 5 -->
+      <figure class="polaroid p5">
+        <img src="outfit5.png" alt="Traje clásico" />
+        <figcaption>Traje clásico</figcaption>
+      </figure>
 
-        <div class="lightbox" id="lightbox">
-          <div class="lightbox-card">
-            <img id="lightboxImg" src="" alt="" />
-            <div id="lightboxCap"></div>
-          </div>
-        </div>
+      <!-- FOTO 6 -->
+      <figure class="polaroid p6">
+        <img src="outfit6.png" alt="Tirantes y actitud" />
+        <figcaption>Tirantes y actitud</figcaption>
+      </figure>
+
+    </div>
+
+    <div class="lightbox" id="lightbox">
+      <div class="lightbox-card">
+        <img id="lightboxImg" src="" alt="" />
+        <div id="lightboxCap"></div>
       </div>
     </div>
+  </div>
+</div>
 
   </div>
 
@@ -728,7 +753,7 @@
     const closeOverlay = document.getElementById('closeOverlay');
     const overlay = document.getElementById('overlay');
 
-    const sendBtn = document.getElementById('sendBtn');
+    const rsvpForm = document.getElementById('rsvpForm');
     const guestName = document.getElementById('guestName');
     const okBox = document.getElementById('okBox');
     const codeBox = document.getElementById('codeBox');
@@ -828,22 +853,52 @@
       codeBox.textContent = `Código Noir: ${data.code}`;
     }
 
-    sendBtn.addEventListener('click', function() {
-      const name = guestName.value.trim();
+    //form
+    rsvpForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
 
-      if (!name) {
-        alert('Ingresa tu nombre.');
-        return;
-      }
+    const name = guestName.value.trim();
 
-      const saved = load();
-      const code = saved?.code || codeFor(name);
-      const data = { name, code };
+    if (!name) {
+    alert('Ingresa tu nombre y apellido.');
+    return;
+    }
 
-      save(data);
-      render(data);
+    const saved = load();
+    const code = saved?.code || codeFor(name);
+    const data = { name, code };
+
+    save(data);
+    render(data);
+
+    /*
+    PASO IMPORTANTE:
+    Aquí debes reemplazar la URL por tu endpoint de Formspree.
+    Ejemplo:
+    const endpoint = "https://formspree.io/f/TU_CODIGO";
+    */
+    const endpoint = "https://formspree.io/f/TU_CODIGO";
+
+    try {
+    await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify({
+        mensaje: `${name} confirmó su asistencia`,
+        nombre: name,
+        codigo: code,
+        evento: "Club Noir"
+        })
+      });
+    } catch (error) {
+      console.log("No se pudo enviar el correo todavía:", error);
+    }
     });
 
+    
     render(load());
 
     function updateCountdown() {
